@@ -27,7 +27,11 @@ BY : MOHAMMAD HESSAM VAEZI
 #include <delay.h>
 
 // Declare your global variables here
+void process(int motor_duration,char* message)
+{
 
+
+}
 void main(void)
 {
 // Declare your local variables here
@@ -149,14 +153,27 @@ lcd_init(40);
 
 while (1)
       {
+      
       if(PIND.1==1)
+      {
       while(PIND.1==1)
       {
        lcd_clear();
        lcd_gotoxy(0, 0);
-       lcd_puts("Press 1 or 2");
+       lcd_puts("Use Buttons");
        delay_ms(500);
+       if(PIND.2 ==1)
+       while(PIND.2 ==1)
+       {
+       lcd_clear();
+       lcd_gotoxy(0, 0);
+       lcd_puts("program 1");
+       PORTD.0=1;
+        
+       }
+       
       }
 
+      } 
       }
 }
