@@ -25,13 +25,44 @@ BY : MOHAMMAD HESSAM VAEZI
 #include <mega32.h>
 #include <alcd.h>
 #include <delay.h>
+#include <stdio.h> 
 
-// Declare your global variables here
-void process(int motor_duration,char* message)
+/*void process(int motor_duration,char* message)
 {
 
 
-}
+} */
+void timer(int sec,int min,int hour) 
+{ 
+    char s=sec,m=min,h=hour,A[16]; 
+    lcd_init(16); 
+    while (1) 
+    { 
+        s--; 
+        if(s<1) 
+        { 
+            s=59; 
+            m--; 
+        } 
+        if(m<0) 
+        { 
+            m=59; 
+            h--; 
+        } 
+        if(s==1 && m==0 && h==0 )
+        {
+         lcd_clear();
+         lcd_gotoxy(0,0);   
+         lcd_puts("READY");
+         delay_ms(5000);
+         break;
+        }  
+        sprintf(A,"Time: %02u:%02u:%02u ",h,m,s); 
+        lcd_gotoxy(0,0); 
+        lcd_puts(A); 
+        delay_ms(1000); 
+    } 
+}  
 void main(void)
 {
 // Declare your local variables here
@@ -149,7 +180,7 @@ TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 // D6 - PORTB Bit 6
 // D7 - PORTB Bit 7
 // Characters/line: 20
-lcd_init(40);
+lcd_init(20);
 
 while (1)
       {
@@ -165,10 +196,11 @@ while (1)
        if(PIND.2 ==1)
        while(PIND.2 ==1)
        {
+       lcd_puts("Program 1");
        lcd_clear();
        lcd_gotoxy(0, 0);
-       lcd_puts("program 1");
        PORTD.0=1;
+       timer(2,1,0);
         
        }
        
