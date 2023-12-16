@@ -26,6 +26,33 @@ BY : MOHAMMAD HESSAM VAEZI
 #include <alcd.h>
 #include <delay.h>
 #include <stdio.h> 
+#define TEMPERATURE_LEVEL_SENSOR 0xC0
+
+#define ADC_VREF_TYPE 0xC0
+unsigned int read_adc(unsigned char adc_input){
+ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
+delay_us(10);
+ADCSRA|=0x40;
+while ((ADCSRA & 0x10)==0);
+ADCSRA|=0x10;
+return ADCW;
+}
+
+unsigned int a;
+char s[15];
+void temp(void){
+PORTC=0x00;
+DDRC=0xF7;
+ADMUX=ADC_VREF_TYPE & 0xff;
+ADCSRA=0x83;
+lcd_init(16);
+while (1){
+a=read_adc(0);
+sprintf(s,"Actual Temp=%u",a/4);
+lcd_gotoxy(0,0);
+lcd_puts(s);
+} 
+} 
 
 /*void process(int motor_duration,char* message)
 {
@@ -34,7 +61,8 @@ BY : MOHAMMAD HESSAM VAEZI
 } */
 void timer(int sec,int min,int hour) 
 { 
-    char s=sec,m=min,h=hour,A[16]; 
+    int s=sec,m=min,h=hour;
+    char A[16]; 
     lcd_init(16); 
     while (1) 
     { 
@@ -70,7 +98,7 @@ void main(void)
 // Input/Output Ports initialization
 // Port A initialization
 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
-DDRA=(0<<DDA7) | (0<<DDA6) | (0<<DDA5) | (0<<DDA4) | (0<<DDA3) | (0<<DDA2) | (0<<DDA1) | (0<<DDA0);
+DDRA=(0<<DDA7) | (0<<DDA6) | (0<<DDA5) | (0<<DDA4) | (0<<DDA3) | (0<<DDA2) | (0<<DDA1) | (1<<DDA0);
 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T 
 PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
 
@@ -82,7 +110,7 @@ PORTB=(0<<PORTB7) | (0<<PORTB6) | (0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<
 
 // Port C initialization
 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
-DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
+DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (1<<DDC0);
 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T 
 PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
 
@@ -185,7 +213,7 @@ lcd_init(20);
 while (1)
       {
       
-      if(PIND.1==1)
+      if(PIND.1==1 )
       {
       while(PIND.1==1)
       {
@@ -196,16 +224,20 @@ while (1)
        if(PIND.2 ==1)
        while(PIND.2 ==1)
        {
+       //PORTC.0 = 1; why ????
        lcd_puts("Program 1");
        lcd_clear();
        lcd_gotoxy(0, 0);
        PORTD.0=1;
-       timer(2,1,0);
+       timer(0,1,0);
         
        }
+      
        
       }
 
-      } 
+      }
+      
+ 
       }
 }
