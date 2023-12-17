@@ -26,78 +26,66 @@ BY : MOHAMMAD HESSAM VAEZI
 #include <alcd.h>
 #include <delay.h>
 #include <stdio.h> 
-#define TEMPERATURE_LEVEL_SENSOR 0xC0
-#define ADC_VREF_TYPE 0xC0
-#define door_position PIND.5
 
-unsigned int read_adc(unsigned char adc_input){
-ADMUX=adc_input | (ADC_VREF_TYPE & 0xff);
-delay_us(10);
-ADCSRA|=0x40;
-while ((ADCSRA & 0x10)==0);
-ADCSRA|=0x10;
-return ADCW;
-}
 
-unsigned int a;
-char s[15];
-void temp(void){
-PORTC=0x00;
-DDRC=0xF7;
-ADMUX=ADC_VREF_TYPE & 0xff;
-ADCSRA=0x83;
-lcd_init(16);
-while (1){
-a=read_adc(0);
-sprintf(s,"Actual Temp=%u",a/4);
-lcd_gotoxy(0,0);
-lcd_puts(s);
-} 
-} 
 
-void process(int sec,int min,int hour,int door) 
+
+ 
+
+void process(int sec,int min,int hour) 
 { 
     int s=sec,m=min,h=hour;
-    
-    //char t=temp;
     char A[16]; 
     lcd_init(16);
  
-    while (1) 
-    {
+while (1) 
+{
         if(PIND.5==1)
         {
-                PORTD.0=1;
-                s--; 
-                if(s<0) 
-                { 
-                    s=59; 
-                    m--; 
-                } 
-                if(m<0) 
-                { 
-                    m=59; 
-                    h--; 
-                } 
-                if(s==0 && m==0 && h==0 )
-                {
+            if(PIND.6==0)
+            { 
+                    PORTD.0=1;
+                    s--; 
+                    if(s<0) 
+                    { 
+                        s=59; 
+                        m--; 
+                    } 
+                    if(m<0) 
+                    { 
+                        m=59; 
+                        h--; 
+                    } 
+                    if(s==0 && m==0 && h==0 )
+                    {
+                     lcd_clear();
+                     lcd_gotoxy(0,0);   
+                     lcd_puts("READY");
+                     delay_ms(5000);
+                    
+                    }
+                    /*else if (t >= 40)
+                    {
+                     lcd_clear();
+                     lcd_gotoxy(0,0);   
+                     lcd_puts("Error");
+                     delay_ms(5000);
+                    } */ 
+                    sprintf(A,"Time: %02u:%02u:%02u ",h,m,s); 
+                    lcd_gotoxy(0,0); 
+                    lcd_puts(A); 
+                    delay_ms(1000);
+                    }
+            else
+        {
+                 PORTD.0=0;
                  lcd_clear();
                  lcd_gotoxy(0,0);   
-                 lcd_puts("READY");
-                 delay_ms(5000);
-                
-                }
-                /*else if (t >= 40)
-                {
-                 lcd_clear();
-                 lcd_gotoxy(0,0);   
-                 lcd_puts("Error");
-                 delay_ms(5000);
-                } */ 
-                sprintf(A,"Time: %02u:%02u:%02u ",h,m,s); 
-                lcd_gotoxy(0,0); 
-                lcd_puts(A); 
-                delay_ms(1000);
+                 lcd_puts("Paused");
+                 
+        }
+ 
+                    
         }
         else
         {
@@ -107,7 +95,7 @@ void process(int sec,int min,int hour,int door)
                  lcd_puts("close door");
                  
         }
-    } 
+} 
 }  
 void main(void)
 {
@@ -135,7 +123,7 @@ PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<
 
 // Port D initialization
 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=Out 
-DDRD=(0<<DDD7) | (0<<DDD6) | (1<<DDD5) | (1<<DDD4) | (1<<DDD3) | (1<<DDD2) | (0<<DDD1) | (1<<DDD0);
+DDRD=(0<<DDD7) | (1<<DDD6) | (1<<DDD5) | (1<<DDD4) | (1<<DDD3) | (1<<DDD2) | (0<<DDD1) | (1<<DDD0);
 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=0 
 PORTD=(0<<PORTD7) | (0<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
 
@@ -244,21 +232,21 @@ while (1)
        {
             while(PIND.2 ==1)
             {  
-             process(30,0,0,door_position);
+             process(30,0,0);
             }
        }
        if(PIND.3 ==1)
        {
             while(PIND.3 ==1)
             {
-            process(0,1,0,door_position);
+            process(0,1,0);
             }
        }
        if(PIND.4 ==1)
        {
             while(PIND.4 ==1)
             { 
-            process(0,0,2,door_position);
+            process(0,0,2);
             }
        }
        
