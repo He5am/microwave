@@ -58,19 +58,15 @@ while (1)
                     } 
                     if(s==0 && m==0 && h==0 )
                     {
+                     PORTD.0=0;
                      lcd_clear();
                      lcd_gotoxy(0,0);   
                      lcd_puts("READY");
+                     PINA.0=1;
                      delay_ms(5000);
+                     return; 
                     
                     }
-                    /*else if (t >= 40)
-                    {
-                     lcd_clear();
-                     lcd_gotoxy(0,0);   
-                     lcd_puts("Error");
-                     delay_ms(5000);
-                    } */ 
                     sprintf(A,"Time: %02u:%02u:%02u ",h,m,s); 
                     lcd_gotoxy(0,0); 
                     lcd_puts(A); 
@@ -216,7 +212,6 @@ TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 // D7 - PORTB Bit 7
 // Characters/line: 20
 lcd_init(20);
-//a=read_adc(0);
 while (1)
       {
       
@@ -232,7 +227,8 @@ while (1)
        {
             while(PIND.2 ==1)
             {  
-             process(30,0,0);
+             process(5,0,0);
+             return; 
             }
        }
        if(PIND.3 ==1)
@@ -240,6 +236,7 @@ while (1)
             while(PIND.3 ==1)
             {
             process(0,1,0);
+            return; 
             }
        }
        if(PIND.4 ==1)
@@ -247,6 +244,7 @@ while (1)
             while(PIND.4 ==1)
             { 
             process(0,0,2);
+            return; 
             }
        }
        
