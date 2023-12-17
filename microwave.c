@@ -28,10 +28,6 @@ BY : MOHAMMAD HESSAM VAEZI
 #include <stdio.h> 
 
 
-
-
- 
-
 void process(int sec,int min,int hour) 
 { 
     int s=sec,m=min,h=hour;
@@ -63,11 +59,8 @@ while (1)
                      lcd_gotoxy(0,0);   
                      lcd_puts("READY");
                      PINA.0=1;
-                     
-                     
-                     
-                     
-                    
+                     delay_ms(200);
+                     PINC.0=0;
                      return; 
                     
                     }
@@ -92,7 +85,7 @@ while (1)
                  PORTD.0=0;
                  lcd_clear();
                  lcd_gotoxy(0,0);   
-                 lcd_puts("close door");
+                 lcd_puts("close the door");
                  
         }
 } 
@@ -117,7 +110,7 @@ PORTB=(0<<PORTB7) | (0<<PORTB6) | (0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<
 
 // Port C initialization
 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In 
-DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (1<<DDC0);
+DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T 
 PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
 
@@ -215,7 +208,7 @@ TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 // D6 - PORTB Bit 6
 // D7 - PORTB Bit 7
 // Characters/line: 20
-lcd_init(20);
+lcd_init(16);
 while (1)
       {
       
@@ -227,11 +220,12 @@ while (1)
            lcd_gotoxy(0, 0);
            lcd_puts("Press Buttons");
            delay_ms(500);
+           while(!(PIND.0 || PIND.1 ||PIND.2));
        if(PIND.2 ==1)
        {
             while(PIND.2 ==1)
             {  
-             process(5,0,0);
+             process(15,0,0);
              return; 
             }
        }
