@@ -63,7 +63,11 @@ while (1)
                      lcd_gotoxy(0,0);   
                      lcd_puts("READY");
                      PINA.0=1;
-                     delay_ms(5000);
+                     
+                     
+                     
+                     
+                    
                      return; 
                     
                     }
