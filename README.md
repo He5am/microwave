@@ -1,33 +1,17 @@
-شرح پروژه:
-در این پروژه با استفاده از میکروکنترلر و یک LCD و موتور وBUZZER و دکمه یک ماکروویو پیاده سازی انجام شده است.
-اساس کار به این شکل می باشد که یک دکمه برای روشن یا خاموش کردن ماکروویو به پورت D1 متصل شده است 
-همچنین یک دکمه برای استاپ کردن تایمر در نظر گرفته شده که به پورت D6 متصل شده است
-برای شبیه سازی درب ماکروویو نیز از یک دکمه استفاده کردم که به پورت D5 متصل شده است
-این ماکروویو برای سه کار برنامه ریزی شده:
-PROGRAM1 : برنامه اول که تایمر آن کم می باشد برای داغ کردن مایعات استفاده می شود.
-PROGRAM2 : برنامه دوم که تایمر آن در مقیاس دقیقه می باشد برای داغ کردن غذا استفاده می شود.
-PROGRAM2 : برنامه سوم برای پخت غذا ها در مقیاس ساعت استفاده می شود.
-برای هر کدارم از این برنامه ها یک دکمه در نظر گرفته شده است که برای جلوگیری از سیم پیچی های زیاد از بخش Terminal از ابزار DEFAULT استفاده کردم.
-همچنین یک دکمه به همین روش برای استفاده مجدد (RESTART) تعبیه کردم تا با همین مکانیزم پس از فشردن دکمه بتوان از ماکروویو مجددا استفاده کرد.
-برای بخش داخل ماکروویو یک موتور و یک LED در نظر گرفتم.
-موتور از طریق یک مقاومت 1 کیلواهمی به یک ترانزیستور جهت قطع و وصل کردن جریان متصل شده و از سمت دیگر یک منبع POWER در نظر گرفته شده.
-همانند دیگر ماکروویو ها که بعد از اتمام عملیات کاربر را با صدا خبردار میکنند از یک buzzer استفاده کردم و به ترانزیستور وصل کردم تا وقتی جریان ورودی حاصل شد به صدا درآید.
-در نهایت برای نمایش تایمر از یک LCD استفاده کردم و پیام هارا روی آن نشان میدهم.
-پیام ها شامل : پیام بستن در ، پیام PAUSE ، پیام READY و پیام فشردن دکمه ها می باشد.
-شرح کد :
-این کد شامل دو تابع می باشد.
-تابع process :
-این تابع سه ورودی برای تنظیم تایم برای اجرای عملیات میگیرد که از طریق تابع main این سه مقدار را به آن پاس میدهیم.
-پس از تعریف متغییر های مورد نیاز مثل ثانیه و دقیقه و ساعت و اندازه lcd یک حلقه while همواره درست نوشتم که در آن چند شرط را بررسی کنم.
-در شرط اول چک میکنم که حتما برای اجرا درب ماکروویو بسته باشد در غیر این صورت در قسمت else همین if نوشتم پیام close the door را نمایش دهد.
-در شرط دوم دکمه PAUSE را چک میکنم ؛ یعنی اگر این دکمه نشده باشد عملیات شمارش شروع می شود ؛ اگر این دکمه فشرده شود در قسمت else نوشتم که عملیات گرم کردن ، چرخش موتور و چراغ LED متوقف شود و به کاربر پیام PAUSE نمایش داده شود.
-اگر هر دو شرط درست باشند به عملیات ثانیه شمار می رسیم.
-در این عملیات ابتدا از ثانیه شمار یکی یکی کم میکنیم تا به 0 برسیم وقتی به صفر برسیم یک واحد از دقیقه کم میکنیم و وقتی دقیقه به 0 برسد یک واحد از ساعت کم می کنیم.به همین منوال هرگاه هر سه واحد ما 0 شوند موتور و دیگر عملیات هارا متوقف میکنیم ، LCD را پاک میکنیم و پیام READY را روی آن نمایش داده و کاربر را با صدای بوق از تمام شدن عملیات خبردار میکنیم.
-تابع Main :
-در این تابع با استفاده از یک if نوشتم اگر کاربر ماکروویو را روشن کرد حلقه while شروع به کار کند تا به کاربر نشان دهد یک دکمه را انتخاب کند. 
-در صورت فشار دادن هر دکمه تابع process با مقادیر داده شده شروع به کار میکند.
-برنامه اول 15 ثانیه ، برنامه دوم 1 دقیقه و برنامه سوم 2 ساعت کار میکند.
-لازم به ذکر است توجه داشته باشید که دکمه ها به طور کامل فشرده شوند.
-			
+Project Description: In this project, implementation has been done using a microcontroller, an LCD, a motor, a BUZZER, and a button for a microwave. The basic operation is as follows: a button for turning the microwave on or off is connected to port D1. Additionally, a button to stop the timer is considered and connected to port D6. For simulating the microwave door, I used another button connected to port D5. This microwave is programmed for three tasks:
 
-										باتشکر از توجه شما
+1. PROGRAM1: The first program, with a short timer, is used for heating liquids.
+2. PROGRAM2: The second program, with a timer in minutes, is used for heating food.
+3. PROGRAM3: The third program, with a timer in hours, is used for cooking meals.
+
+For each of these programs, a button is considered to prevent excessive wiring, using the DEFAULT tool from the Terminal section. Similarly, a button is implemented for reuse (RESTART) to enable reuse of the microwave after pressing the button again.
+
+For the inside of the microwave, a motor and an LED are considered. The motor is connected to a transistor via a 1-kilohm resistor for on/off control of the current. On the other side, a POWER source is included. Like other microwaves that alert the user with a sound after completing the operation, I used a buzzer connected to a transistor so that it produces sound when the input current is obtained.
+
+Finally, for displaying the timer, an LCD is used to show messages such as "Door Closed," "PAUSE," "READY," and "Press Buttons."
+
+Code Description: This code includes two functions:
+
+1. Process function: This function takes three inputs for setting the timer for operation. These three values are passed to it through the main function. After defining the necessary variables such as seconds, minutes, hours, and the LCD size, I wrote a while loop that continuously checks several conditions. In the first condition, it checks whether the microwave door is closed; otherwise, in the else part of this if statement, it displays the message "Close the door." In the second condition, it checks the PAUSE button; if this button is not pressed, the heating operation begins. If this button is pressed, in the else part, it stops the heating, motor rotation, and LED light and displays the "PAUSE" message to the user. If both conditions are true, we reach the second-counting operation. In this operation, we decrement the seconds one by one until it reaches 0. When it reaches zero, we decrement one unit from the minutes, and when the minutes reach 0, we decrement one unit from the hours. In the same manner, when all three units become 0, we stop the motor and other operations, clear the LCD, display the "READY" message, and alert the user with a buzzer about the completion of the operation.
+
+2. Main function: In this function, using an if statement, I wrote that if the user turns on the microwave, the while loop starts working to prompt the user to select a button. If any button is pressed, the process function starts working with the given values. The first program runs for 15 seconds, the second program for 1 minute, and the third program for 2 hours. Note that buttons should be fully pressed.
