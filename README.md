@@ -1,4 +1,5 @@
-Project Description: In this project, implementation has been done using a microcontroller, an LCD, a motor, a BUZZER, and a button for a microwave. The basic operation is as follows: a button for turning the microwave on or off is connected to port D1. Additionally, a button to stop the timer is considered and connected to port D6. For simulating the microwave door, I used another button connected to port D5. This microwave is programmed for three tasks:
+Project Description: 
+In this project, implementation has been done using a microcontroller, an LCD, a motor, a BUZZER, and a button for a microwave. The basic operation is as follows: a button for turning the microwave on or off is connected to port D1. Additionally, a button to stop the timer is considered and connected to port D6. For simulating the microwave door, I used another button connected to port D5. This microwave is programmed for three tasks:
 
 1. PROGRAM1: The first program, with a short timer, is used for heating liquids.
 2. PROGRAM2: The second program, with a timer in minutes, is used for heating food.
